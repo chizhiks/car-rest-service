@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/car_database
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    generate-ddl: false
+    database: postgresql
+    show-sql: true
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-staging.sql
+      continue-on-error: false
+  flyway:
+    enabled: false
+logging:
+  level:
+    root: WARN
+    ua:
+      foxminded:
+        chyzhov:
+          carrestservice: DEBUG
