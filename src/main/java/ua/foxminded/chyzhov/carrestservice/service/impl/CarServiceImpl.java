@@ -12,6 +12,8 @@ import ua.foxminded.chyzhov.carrestservice.entity.Car;
 import ua.foxminded.chyzhov.carrestservice.entity.Make;
 import ua.foxminded.chyzhov.carrestservice.entity.Model;
 import ua.foxminded.chyzhov.carrestservice.mapper.CarMapper;
+import ua.foxminded.chyzhov.carrestservice.mapper.CategoryMapper;
+import ua.foxminded.chyzhov.carrestservice.mapper.ModelMapper;
 import ua.foxminded.chyzhov.carrestservice.repository.CarRepository;
 import ua.foxminded.chyzhov.carrestservice.repository.MakeRepository;
 import ua.foxminded.chyzhov.carrestservice.repository.ModelRepository;
@@ -36,6 +38,8 @@ public class CarServiceImpl implements CarService {
     private final CarSpecificationBuilder specificationBuilder;
     private final MakeRepository makeRepository;
     private final ModelRepository modelRepository;
+    private final ModelMapper modelMapper;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public Page<CarDto> getFilteredCars(CarFilterDto filterDto, Pageable pageable) {
@@ -130,8 +134,8 @@ public class CarServiceImpl implements CarService {
 
         car.setObjectId(carDto.objectId());
         car.setYear(carDto.year());
-        car.setModel(carMapper.toEntity(carDto.model()));
-        car.setCategories(carMapper.toEntity(carDto.categories()));
+        car.setModel(modelMapper.toEntity(carDto.model()));
+        car.setCategories(categoryMapper.toEntity(carDto.categories()));
 
         Car updatedCar = carRepository.save(car);
 

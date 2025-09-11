@@ -13,6 +13,8 @@ import java.util.List;
 @Component
 public class CarSpecificationBuilder {
 
+    public static final String WILDCARD = "%";
+
     public Specification<Car> build(CarFilterDto filterDto) {
         return (root, query, cb) -> {
             List<Predicate> criteriaPredicates = new ArrayList<>();
@@ -23,7 +25,7 @@ public class CarSpecificationBuilder {
                 Join<Model, Make> makeJoin = modelJoin.join(Model_.make);
                 criteriaPredicates.add(
                         cb.like(cb.lower(makeJoin.get(Make_.make)),
-                                "%" + filterDto.manufacturer().toLowerCase() + "%")
+                                WILDCARD + filterDto.manufacturer().toLowerCase() + WILDCARD)
                 );
             }
 
@@ -32,7 +34,7 @@ public class CarSpecificationBuilder {
                 Join<Car, Model> modelJoin = root.join(Car_.model);
                 criteriaPredicates.add(
                         cb.like(cb.lower(modelJoin.get(Model_.model)),
-                                "%" + filterDto.model().toLowerCase() + "%")
+                                WILDCARD + filterDto.model().toLowerCase() + WILDCARD)
                 );
             }
 
@@ -41,7 +43,7 @@ public class CarSpecificationBuilder {
                 Join<Car, Category> categoriesJoin = root.join(Car_.categories);
                 criteriaPredicates.add(
                         cb.like(cb.lower(categoriesJoin.get(Category_.category)),
-                                "%" + filterDto.category().toLowerCase() + "%")
+                                WILDCARD + filterDto.category().toLowerCase() + WILDCARD)
                 );
             }
 

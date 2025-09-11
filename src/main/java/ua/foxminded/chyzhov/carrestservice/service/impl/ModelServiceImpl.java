@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.foxminded.chyzhov.carrestservice.dto.ModelDto;
 import ua.foxminded.chyzhov.carrestservice.entity.Make;
 import ua.foxminded.chyzhov.carrestservice.entity.Model;
-import ua.foxminded.chyzhov.carrestservice.mapper.CarMapper;
+import ua.foxminded.chyzhov.carrestservice.mapper.MakeMapper;
+import ua.foxminded.chyzhov.carrestservice.mapper.ModelMapper;
 import ua.foxminded.chyzhov.carrestservice.repository.MakeRepository;
 import ua.foxminded.chyzhov.carrestservice.repository.ModelRepository;
 import ua.foxminded.chyzhov.carrestservice.service.ModelService;
@@ -23,8 +23,9 @@ import ua.foxminded.chyzhov.carrestservice.util.exceptions.RecordAlreadyExists;
 public class ModelServiceImpl implements ModelService {
 
     private final ModelRepository modelRepository;
-    private final CarMapper carMapper;
     private final MakeRepository makeRepository;
+    private final ModelMapper modelMapper;
+    private final MakeMapper makeMapper;
 
     @Override
     public ModelDto findById(Integer modelId) {
@@ -33,7 +34,7 @@ public class ModelServiceImpl implements ModelService {
 
         log.info("Model with modelId: {} found successfully", modelId);
 
-        return carMapper.toDto(model);
+        return modelMapper.toDto(model);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class ModelServiceImpl implements ModelService {
 
         log.info("{} models have been retrieved successfully", modelPage.getTotalElements());
 
-        return modelPage.map(carMapper::toDto);
+        return modelPage.map(modelMapper::toDto);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ModelServiceImpl implements ModelService {
 
         log.info("{} models have been retrieved successfully", modelPage.getTotalElements());
 
-        return modelPage.map(carMapper::toDto);
+        return modelPage.map(modelMapper::toDto);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class ModelServiceImpl implements ModelService {
 
         log.info("Model with modelName: {} found successfully", modelName);
 
-        return carMapper.toDto(model);
+        return modelMapper.toDto(model);
     }
 
     @Override
@@ -75,13 +76,13 @@ public class ModelServiceImpl implements ModelService {
             throw new RecordAlreadyExists("Model", "modelName", modelDto.model());
         }
 
-        Model model = carMapper.toEntity(modelDto);
+        Model model = modelMapper.toEntity(modelDto);
 
         Model savedModel = modelRepository.save(model);
 
         log.info("Model with modelId: {} was successfully saved", savedModel.getModelId());
 
-        return carMapper.toDto(savedModel);
+        return modelMapper.toDto(savedModel);
     }
 
     @Override
@@ -107,7 +108,7 @@ public class ModelServiceImpl implements ModelService {
         Model savedModel = modelRepository.save(model);
         log.info("Model with modelId: {} was successfully saved", savedModel.getModelId());
 
-        return carMapper.toDto(savedModel);
+        return modelMapper.toDto(savedModel);
     }
 
     @Override
@@ -116,14 +117,14 @@ public class ModelServiceImpl implements ModelService {
 
         Model model = modelRepository.findById(modelId).orElseThrow(() -> new NotFoundException("Model", modelId));
 
-        model.setMake(carMapper.toEntity(modelDto.make()));
+        model.setMake(makeMapper.toEntity(modelDto.make()));
         model.setModel(modelDto.model());
 
         Model updatedModel = modelRepository.save(model);
 
         log.info("Model with modelId: {} was successfully updated", updatedModel.getModelId());
 
-        return carMapper.toDto(updatedModel);
+        return modelMapper.toDto(updatedModel);
     }
 
     @Override

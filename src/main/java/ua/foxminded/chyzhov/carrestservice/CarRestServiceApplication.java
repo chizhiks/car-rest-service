@@ -1,11 +1,13 @@
 package ua.foxminded.chyzhov.carrestservice;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ua.foxminded.chyzhov.carrestservice.service.impl.CsvImportService;
 
+@Slf4j
 @SpringBootApplication
 public class CarRestServiceApplication implements CommandLineRunner {
 
@@ -21,8 +23,8 @@ public class CarRestServiceApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         String csvFilePath = "src/main/resources/cars.csv";
 
-        System.out.println("Початок імпорту даних з CSV...");
+        log.info("Starting to import data from CSV...");
         csvImportService.importCarsFromCsv(csvFilePath);
-        System.out.println("Імпорт завершено успішно!");
+        log.info("Import completed successfully!");
     }
 }

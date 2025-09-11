@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.foxminded.chyzhov.carrestservice.dto.MakeDto;
 import ua.foxminded.chyzhov.carrestservice.entity.Make;
-import ua.foxminded.chyzhov.carrestservice.mapper.CarMapper;
+import ua.foxminded.chyzhov.carrestservice.mapper.MakeMapper;
 import ua.foxminded.chyzhov.carrestservice.repository.MakeRepository;
 import ua.foxminded.chyzhov.carrestservice.service.MakeService;
 import ua.foxminded.chyzhov.carrestservice.util.exceptions.NotFoundException;
@@ -20,7 +20,7 @@ import ua.foxminded.chyzhov.carrestservice.util.exceptions.RecordAlreadyExists;
 public class MakeServiceImpl implements MakeService {
 
     private final MakeRepository makeRepository;
-    private final CarMapper carMapper;
+    private final MakeMapper makeMapper;
 
     @Override
     public MakeDto findById(Integer makeId) {
@@ -29,7 +29,7 @@ public class MakeServiceImpl implements MakeService {
 
         log.info("Make with makeId: {} found successfully", makeId);
 
-        return carMapper.toDto(make);
+        return makeMapper.toDto(make);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class MakeServiceImpl implements MakeService {
 
         log.info("Make with name: {} found successfully", name);
 
-        return carMapper.toDto(make);
+        return makeMapper.toDto(make);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class MakeServiceImpl implements MakeService {
 
         log.info("{} makes have been retrieved successfully", makePage.getTotalElements());
 
-        return makePage.map(carMapper::toDto);
+        return makePage.map(makeMapper::toDto);
     }
 
     @Override
@@ -61,13 +61,13 @@ public class MakeServiceImpl implements MakeService {
             throw new RecordAlreadyExists("Make", "makeName", makeDto.make());
         }
 
-        Make make = carMapper.toEntity(makeDto);
+        Make make = makeMapper.toEntity(makeDto);
 
         Make savedMake = makeRepository.save(make);
 
         log.info("Make with makeId: {} was successfully saved", savedMake.getMakeId());
 
-        return carMapper.toDto(savedMake);
+        return makeMapper.toDto(savedMake);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class MakeServiceImpl implements MakeService {
 
         log.info("Make with makeId: {} was successfully updated", updatedMake.getMakeId());
 
-        return carMapper.toDto(updatedMake);
+        return makeMapper.toDto(updatedMake);
     }
 
     @Override

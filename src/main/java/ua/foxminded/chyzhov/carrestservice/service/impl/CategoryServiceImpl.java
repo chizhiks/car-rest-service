@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.foxminded.chyzhov.carrestservice.dto.CategoryDto;
 import ua.foxminded.chyzhov.carrestservice.entity.Category;
-import ua.foxminded.chyzhov.carrestservice.mapper.CarMapper;
+import ua.foxminded.chyzhov.carrestservice.mapper.CategoryMapper;
 import ua.foxminded.chyzhov.carrestservice.repository.CategoryRepository;
 import ua.foxminded.chyzhov.carrestservice.service.CategoryService;
 import ua.foxminded.chyzhov.carrestservice.util.exceptions.NotFoundException;
@@ -20,7 +20,7 @@ import ua.foxminded.chyzhov.carrestservice.util.exceptions.RecordAlreadyExists;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CarMapper carMapper;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public CategoryDto findById(Integer categoryId) {
@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         log.info("Category with categoryId: {} found successfully", category);
 
-        return carMapper.toDto(category);
+        return categoryMapper.toDto(category);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         log.info("{} categories have been retrieved successfully", categoryPage.getTotalElements());
 
-        return categoryPage.map(carMapper::toDto);
+        return categoryPage.map(categoryMapper::toDto);
     }
 
     @Override
@@ -51,13 +51,13 @@ public class CategoryServiceImpl implements CategoryService {
             throw new RecordAlreadyExists("Category", "categoryName", categoryDto.category());
         }
 
-        Category category = carMapper.toEntity(categoryDto);
+        Category category = categoryMapper.toEntity(categoryDto);
 
         Category savedCategory = categoryRepository.save(category);
 
         log.info("Category with categoryId: {} saved successfully", savedCategory);
 
-        return carMapper.toDto(savedCategory);
+        return categoryMapper.toDto(savedCategory);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         log.info("Category with categoryId: {} updated successfully", updatedCategory);
 
-        return carMapper.toDto(updatedCategory);
+        return categoryMapper.toDto(updatedCategory);
     }
 
     @Override

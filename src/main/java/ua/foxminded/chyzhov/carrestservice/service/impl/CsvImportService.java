@@ -79,7 +79,7 @@ public class CsvImportService {
             String[] categoryNames = categoriesStr.split(",");
             for (String categoryName : categoryNames) {
                 categoryName = categoryName.trim();
-                if (!categoryName.trim().isEmpty()) {
+                if (!categoryName.isEmpty()) {
                     String finalCategoryName = categoryName;
                     Category category = categoryRepository.findByCategory(categoryName)
                             .orElseGet(() -> {
