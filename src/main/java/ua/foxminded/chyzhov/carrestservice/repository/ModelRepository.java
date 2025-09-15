@@ -19,6 +19,4 @@ public interface ModelRepository extends JpaRepository<Model, Integer> {
     Optional<Model> findByModelIgnoreCaseAndMakeMakeIgnoreCase(String modelName, String makeName);
 
     Page<Model> findAllByMakeMakeId(Integer makeMakeId, Pageable pageable);
-
-    String model(String model);
 }

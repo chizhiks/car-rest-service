@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.foxminded.chyzhov.carrestservice.dto.CategoryDto;
-import ua.foxminded.chyzhov.carrestservice.dto.MakeDto;
 import ua.foxminded.chyzhov.carrestservice.service.CategoryService;
 import ua.foxminded.chyzhov.carrestservice.service.impl.CsvImportService;
 
