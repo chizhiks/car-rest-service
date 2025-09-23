@@ -1,3 +1,8 @@
+client-id: carRestServiceApplication
+resource-url: http://localhost:8080/realms/car-rest-service/protocol/openid-connect/token
+grant-type: password
+
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/car_database
@@ -21,6 +26,22 @@ spring:
       continue-on-error: false
   flyway:
     enabled: false
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: carRestServiceApplication
+            authorization-grant-type: authorization_code
+            scope: openid
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/car-rest-service
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/car-rest-service
+
 logging:
   level:
     root: WARN
@@ -28,3 +49,8 @@ logging:
       foxminded:
         chyzhov:
           carrestservice: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: TRACE
+
+server:
+  port: 8000
