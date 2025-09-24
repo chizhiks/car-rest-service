@@ -52,5 +52,12 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.security.oauth2: TRACE
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui-custom.html
+    operationsSorter: method
+
 server:
   port: 8000
