@@ -41,7 +41,7 @@ CREATE TABLE public.cars
     CONSTRAINT cars_model_id_fkey FOREIGN KEY (model_id)
     REFERENCES public.models (model_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID
     );
 
@@ -57,7 +57,7 @@ CREATE TABLE public.cars_categories
     CONSTRAINT cars_categories_object_id_fkey FOREIGN KEY (object_id)
     REFERENCES public.cars (object_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     );
 
 -- THE TABLE OWNER SETTING

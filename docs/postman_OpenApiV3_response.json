@@ -1,0 +1,1833 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Car-Rest-Service API",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "manufacturers",
+      "description": "API for manufacturer-centric operations. Provides hierarchical access to manufacturers, their models, and cars."
+    },
+    {
+      "name": "cars",
+      "description": "API for car management operations. Provides CRUD operations and filtering capabilities."
+    },
+    {
+      "name": "authentication",
+      "description": "API for user authentication. Provides JWT token generation."
+    },
+    {
+      "name": "categories",
+      "description": "API for category management operations. Provides CRUD operations."
+    },
+    {
+      "name": "models",
+      "description": "API for model management operations. Provides CRUD operations."
+    },
+    {
+      "name": "makes",
+      "description": "API for make management operations. Provides CRUD operations."
+    }
+  ],
+  "paths": {
+    "/api/v1/models/{modelId}": {
+      "get": {
+        "tags": [
+          "models"
+        ],
+        "summary": "Get model by id",
+        "description": "Retrieve a specific model by its unique id",
+        "operationId": "getModelById",
+        "parameters": [
+          {
+            "name": "modelId",
+            "in": "path",
+            "description": "Unique identifier of the model",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid modelId format"
+          },
+          "404": {
+            "description": "Model not found with provided id"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "models"
+        ],
+        "summary": "Update model by id",
+        "description": "Update an existing model. Requires authentification",
+        "operationId": "updateModel",
+        "parameters": [
+          {
+            "name": "modelId",
+            "in": "path",
+            "description": "Unique identifier of the model",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModelDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Model updated successfully"
+          },
+          "400": {
+            "description": "Invalid input data or modelId format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Model not found with provided id"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "models"
+        ],
+        "summary": "Delete model by id",
+        "description": "Delete a specific model. Requires authentification.",
+        "operationId": "deleteModelById",
+        "parameters": [
+          {
+            "name": "modelId",
+            "in": "path",
+            "description": "Unique identifier of the model",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Model deleted successfully"
+          },
+          "400": {
+            "description": "Invalid modelId format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Model not found with provided id"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manufacturers/{manufacturerName}": {
+      "get": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Get manufacturer by name",
+        "description": "Retrieve a specific manufacturer by its unique name",
+        "operationId": "getManufacturerByName",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Manufacturer retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid manufacturerName format"
+          },
+          "404": {
+            "description": "Manufacturer not found with provided name"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Update manufacturer by name",
+        "description": "Update an existing manufacturer. Requires authentification.",
+        "operationId": "updateManufacturer",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MakeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Manufacturer updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or manufacturerName format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Make not found with provided name"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Delete manufacturer by name",
+        "description": "Delete a specific manufacturer. Requires authentification.",
+        "operationId": "deleteManufacturer",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Manufacturer deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Manufacturer not found with provided name"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manufacturers/{manufacturerName}/models/{modelName}": {
+      "get": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Get model by manufacturer and model name",
+        "description": "Retrieve a specific model for a manufacturer by model name",
+        "operationId": "getModelByManufacturerAndName",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          },
+          {
+            "name": "modelName",
+            "in": "path",
+            "description": "Name of the model",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Camry"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Manufacturer or model not found with provided name"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Update model by manufacturer and model name",
+        "description": "Update an existing model by a manufacturer. Requires authentification.",
+        "operationId": "updateModelByManufacturerAndName",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          },
+          {
+            "name": "modelName",
+            "in": "path",
+            "description": "Name of the model",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Camry"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModelDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Model updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or parameter format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Manufacturer or model not found with provided name"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Delete model by manufacturer and model name",
+        "description": "Delete a specific model by a manufacturer. Requires authentification.",
+        "operationId": "deleteModelByManufacturerAndName",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          },
+          {
+            "name": "modelName",
+            "in": "path",
+            "description": "Name of the model",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Camry"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Model deleted successfully"
+          },
+          "400": {
+            "description": "Invalid parameter format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Manufacturer or model not found with provided name"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/makes/{makeId}": {
+      "get": {
+        "tags": [
+          "makes"
+        ],
+        "summary": "Get make by Id",
+        "description": "Retrieve a specific make by its unique id",
+        "operationId": "getMakeById",
+        "parameters": [
+          {
+            "name": "makeId",
+            "in": "path",
+            "description": "Unique identifier of the make",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Make retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid makeId format"
+          },
+          "404": {
+            "description": "Make not found with provided id"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "makes"
+        ],
+        "summary": "Update make by Id",
+        "description": "Update an existing make. Requires authentification.",
+        "operationId": "updateMake",
+        "parameters": [
+          {
+            "name": "makeId",
+            "in": "path",
+            "description": "Unique identifier of the make",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MakeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Make updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or makeId format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Make not found with provided id"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "makes"
+        ],
+        "summary": "Delete make by Id",
+        "description": "Delete a specific make. Requires authentification.",
+        "operationId": "deleteMake",
+        "parameters": [
+          {
+            "name": "makeId",
+            "in": "path",
+            "description": "Unique identifier of the make",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Make deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Make not found with provided id"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/categories/{categoryId}": {
+      "get": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Get category by Id",
+        "description": "Retrieve a specific category by its unique id",
+        "operationId": "getCategoryById",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "Unique identifier of the category",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid categoryId format"
+          },
+          "404": {
+            "description": "Category not found with provided id"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Update category by Id",
+        "description": "Update an existing category. Requires authentification",
+        "operationId": "updateCategory",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "Unique identifier of the category",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or categoryId format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Category not found with provided id"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Delete category by Id",
+        "description": "Delete a specific category. Requires authentification.",
+        "operationId": "deleteCategoryById",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "Unique identifier of the category",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Category deleted successfully"
+          },
+          "400": {
+            "description": "Invalid categoryId format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Category not found with provided id"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cars/{objectId}": {
+      "get": {
+        "tags": [
+          "cars"
+        ],
+        "summary": "Get car by objectId",
+        "description": "Retrieve a specific car by its unique objectId",
+        "operationId": "getCarByObjectId",
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "path",
+            "description": "Unique identifier of the car",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "ZRgPP9dBMm"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid objectId format"
+          },
+          "404": {
+            "description": "Car not found with provided objectId"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "cars"
+        ],
+        "summary": "Update car by objectId",
+        "description": "Update an existing car record. Requires authentification.",
+        "operationId": "updateCar",
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "path",
+            "description": "Unique identifier of the car",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "ZRgPP9dBMm"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Car updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or objectId format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Car not found with provided objectId"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "cars"
+        ],
+        "summary": "Delete car by objectId",
+        "description": "Delete a specific car record. Requires authentification.",
+        "operationId": "deleteCarByObjectId",
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "path",
+            "description": "Unique identifier of the car",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "ZRgPP9dBMm"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Car deleted successfully"
+          },
+          "400": {
+            "description": "Invalid objectId format"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Car not found with provided objectId"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/auth": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Authentication user",
+        "description": "Authentication user credentials and return JWT access token",
+        "operationId": "auth",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJfTVF...",
+                  "expires_in": 300,
+                  "refresh_expires_in": 1800,
+                  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI...",
+                  "token_type": "Bearer",
+                  "not-before-policy": 0,
+                  "session_state": "f8d7e892-7c8b-4a5d-9c3f-2e4b6a8f1d3c",
+                  "scope": "openid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials or request format"
+          },
+          "401": {
+            "description": "Authentication failed - invalid username or password"
+          }
+        }
+      }
+    },
+    "/api/v1/models": {
+      "get": {
+        "tags": [
+          "models"
+        ],
+        "summary": "Get all models with pagination",
+        "description": "Retrieve a paginated list of all models",
+        "operationId": "getAllModels",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "description": "Pagination information",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Models retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pagination parameters"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "models"
+        ],
+        "summary": "Create a new model",
+        "description": "Create a new model record. Requires authentification.",
+        "operationId": "createModel",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModelDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Model created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "409": {
+            "description": "Model already exists"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manufacturers": {
+      "get": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Get all manufacturers with pagination",
+        "description": "Retrieve a paginated list of all manufacturers",
+        "operationId": "getAllManufacturers",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "description": "Pagination information",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Manufacturers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pagination parameters"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Create a new manufacturer",
+        "description": "Create a new manufacturer record. Requires authentification.",
+        "operationId": "createManufacturer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MakeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Manufacturer created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "409": {
+            "description": "Manufacturer already exists"
+          }
+        }
+      }
+    },
+    "/api/v1/manufacturers/{manufacturerName}/models": {
+      "get": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Get models by manufacturers",
+        "description": "Retrieve a paginated list of models by a specific manufacturer",
+        "operationId": "getModelsByManufacturer",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "description": "Pagination information",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Models retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid manufacturerName format or pagination parameters"
+          },
+          "404": {
+            "description": "Manufacturer not found with provided name"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Create model for manufacturer",
+        "description": "Create a new model record for a specific manufacturer. Requires authentification.",
+        "operationId": "createModelForManufacturer",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "description": "Name of the model to create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Model created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Manufacturer not found with provided name"
+          },
+          "409": {
+            "description": "Model already exists"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manufacturers/{manufacturerName}/models/{modelName}/{year}": {
+      "post": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Create car by manufacturer, model for year",
+        "description": "Create a new car record for a specific manufacturer, model and year. Requires authentification.",
+        "operationId": "createCarByManufacturerModelYear",
+        "parameters": [
+          {
+            "name": "manufacturerName",
+            "in": "path",
+            "description": "Name of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          },
+          {
+            "name": "modelName",
+            "in": "path",
+            "description": "Name of the model",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Camry"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "Year of the car",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 2025
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "description": "ObjectId of the car"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Car created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "404": {
+            "description": "Manufacturer or model not found with provided name"
+          },
+          "409": {
+            "description": "Car already exists"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/makes": {
+      "get": {
+        "tags": [
+          "makes"
+        ],
+        "summary": "Get all makes with pagination",
+        "description": "Retrieve a paginated list of all car makes",
+        "operationId": "getAllMakes",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "description": "Pagination information",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Makes retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pagination parameters"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "makes"
+        ],
+        "summary": "Create a new make",
+        "description": "Create a new make record. Requires authentification.",
+        "operationId": "createMake",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MakeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Make created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "409": {
+            "description": "Make already exists"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Get all categories with pagination",
+        "description": "Retrieve a paginated list of all categories",
+        "operationId": "getAllCategories",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "description": "Pagination information",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categories retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pagination parameters"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Create a new category",
+        "description": "Create a new category record. Requires authentification",
+        "operationId": "createCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Category created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "409": {
+            "description": "Category already exists"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cars": {
+      "get": {
+        "tags": [
+          "cars"
+        ],
+        "summary": "Get all cars with filtering and pagination",
+        "description": "Retrieve a paginated list of cars with optional filtering by make, model, year, etc.",
+        "operationId": "getAllCars",
+        "parameters": [
+          {
+            "name": "carFilterDto",
+            "in": "query",
+            "description": "Filter criteria for cars",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CarFilterDto"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "description": "Pagination information",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cars retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid filter parameters"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "cars"
+        ],
+        "summary": "Create a new car",
+        "description": "Create a new car record. Requires authentification.",
+        "operationId": "createCar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Car created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "409": {
+            "description": "Car already exists"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manufacturers/id/{makeId}": {
+      "get": {
+        "tags": [
+          "manufacturers"
+        ],
+        "summary": "Get manufacturer by id",
+        "description": "Retrieve a specific manufacturer by its unique id",
+        "operationId": "getManufacturerById",
+        "parameters": [
+          {
+            "name": "makeId",
+            "in": "path",
+            "description": "Unique identifier of the manufacturer",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Manufacturer retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid makeId format"
+          },
+          "404": {
+            "description": "Manufacturer not found with provided id"
+          }
+        }
+      }
+    },
+    "/api/v1/makes/name/{makeName}": {
+      "get": {
+        "tags": [
+          "makes"
+        ],
+        "summary": "Get make by name",
+        "description": "Retrieve a specific make by its name",
+        "operationId": "getMakeByName",
+        "parameters": [
+          {
+            "name": "makeName",
+            "in": "path",
+            "description": "Name of the make",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Toyota"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Make retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid makeName format"
+          },
+          "404": {
+            "description": "Make not found with provided name"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MakeDto": {
+        "type": "object",
+        "properties": {
+          "makeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "make": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "make"
+        ]
+      },
+      "ModelDto": {
+        "type": "object",
+        "properties": {
+          "modelId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "make": {
+            "$ref": "#/components/schemas/MakeDto"
+          },
+          "model": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "make",
+          "model"
+        ]
+      },
+      "CategoryDto": {
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "category"
+        ]
+      },
+      "CarDto": {
+        "type": "object",
+        "properties": {
+          "objectId": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "model": {
+            "$ref": "#/components/schemas/ModelDto"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryDto"
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "model",
+          "objectId",
+          "year"
+        ]
+      },
+      "AuthDto": {
+        "type": "object",
+        "description": "User credentials",
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Page": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {}
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unpaged": {
+            "type": "boolean"
+          },
+          "paged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": {
+            "type": "boolean"
+          },
+          "unsorted": {
+            "type": "boolean"
+          },
+          "sorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CarFilterDto": {
+        "type": "object",
+        "properties": {
+          "manufacturer": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "minYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "category": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
