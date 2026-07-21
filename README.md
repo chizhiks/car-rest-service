@@ -17,19 +17,19 @@ The goal was to practice building a production-style REST API rather than a simp
 
 ## Tech Stack
 
-| Category | Technology |
-|---|---|
-| Language | Java |
-| Framework | Spring Boot |
-| ORM | Hibernate / Spring Data JPA |
-| Security | Spring Security + Keycloak (OAuth2 resource server, JWT) |
-| Database | PostgreSQL |
-| Migrations | Flyway |
-| Mapping | MapStruct (Entity ↔ DTO, zero-reflection) |
-| API Docs | springdoc-openapi / Swagger UI |
-| Data Import | Apache Commons CSV |
-| Testing | JUnit, Mockito, Testcontainers |
-| Monitoring | Spring Boot Actuator |
+| Category    | Technology                                               |
+|--------------|-------------------------------------------------------------|
+| Language    | Java                                                     |
+| Framework   | Spring Boot                                              |
+| ORM         | Hibernate / Spring Data JPA                              |
+| Security    | Spring Security + Keycloak (OAuth2 resource server, JWT) |
+| Database    | PostgreSQL                                               |
+| Migrations  | Flyway                                                    |
+| Mapping     | MapStruct (Entity ↔ DTO, zero-reflection)                |
+| API Docs    | springdoc-openapi / Swagger UI                           |
+| Data Import | Apache Commons CSV                                       |
+| Testing     | JUnit, Mockito, Testcontainers                           |
+| Monitoring  | Spring Boot Actuator                                     |
 
 ## Authentication
 
@@ -42,25 +42,28 @@ The API delegates identity to **Keycloak**:
 ## API Overview
 
 ### Cars — `/api/v1/cars`
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/v1/cars` | Paginated, filterable list of cars (by manufacturer, model, year range, category) |
-| POST | `/api/v1/cars` | Create a car |
-| GET | `/api/v1/cars/{id}` | Get a car by ID |
-| PUT | `/api/v1/cars/{id}` | Update a car |
-| DELETE | `/api/v1/cars/{id}` | Delete a car |
+
+| Method | Endpoint            | Description                                                                       |
+|--------|-----------------------|--------------------------------------------------------------------------------------|
+| GET    | `/api/v1/cars`      | Paginated, filterable list of cars (by manufacturer, model, year range, category) |
+| POST   | `/api/v1/cars`      | Create a car                                                                      |
+| GET    | `/api/v1/cars/{id}` | Get a car by ID                                                                   |
+| PUT    | `/api/v1/cars/{id}` | Update a car                                                                      |
+| DELETE | `/api/v1/cars/{id}` | Delete a car                                                                      |
 
 ### Manufacturers — `/api/v1/manufacturers`
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/v1/manufacturers` | List manufacturers |
-| POST | `/api/v1/manufacturers` | Create a manufacturer |
-| GET / PUT / DELETE | `/api/v1/manufacturers/{name}` | Get, update, or delete a manufacturer |
-| GET / POST | `/api/v1/manufacturers/{name}/models` | List or add models for a manufacturer |
-| GET / PUT / DELETE | `/api/v1/manufacturers/{name}/models/{modelName}` | Get, update, or delete a specific model |
-| POST | `/api/v1/manufacturers/{name}/models/{modelName}/{year}` | Add a model-year variant |
+
+| Method             | Endpoint                                                 | Description                             |
+|----------------------|-------------------------------------------------------------|--------------------------------------------|
+| GET                | `/api/v1/manufacturers`                                  | List manufacturers                      |
+| POST               | `/api/v1/manufacturers`                                  | Create a manufacturer                   |
+| GET / PUT / DELETE | `/api/v1/manufacturers/{name}`                           | Get, update, or delete a manufacturer   |
+| GET / POST         | `/api/v1/manufacturers/{name}/models`                    | List or add models for a manufacturer   |
+| GET / PUT / DELETE | `/api/v1/manufacturers/{name}/models/{modelName}`        | Get, update, or delete a specific model |
+| POST               | `/api/v1/manufacturers/{name}/models/{modelName}/{year}` | Add a model-year variant                |
 
 ### Models — `/api/v1/models` and Categories — `/api/v1/categories`
+
 Standard CRUD (GET list, POST, GET/PUT/DELETE by ID) for both.
 
 ## Architecture
@@ -108,10 +111,21 @@ src/main/java/ua/foxminded/chyzhov/carrestservice/
 ```bash
 git clone https://github.com/chizhiks/car-rest-service.git
 cd car-rest-service
-mvn spring-boot:run
+
+docker compose up --build
 ```
 
-Requires a local PostgreSQL instance and a Keycloak realm named `car-rest-service` (see `application.yaml` for connection details). API runs on `http://localhost:8000`; Swagger UI at `/swagger-ui-custom.html`.
+One command builds the app image, starts PostgreSQL, starts Keycloak, and automatically imports the `car-rest-service` realm — no manual setup in the Keycloak admin console needed.
+
+Two demo accounts are created automatically:
+
+| Username     | Password       | Role            |
+|---------------|------------------|-------------------|
+| `demo-user`  | `demo-pass123` | `USER`          |
+| `demo-admin` | `demo-pass123` | `ADMIN`, `USER` |
+
+API runs on `http://localhost:8000`; Swagger UI at `/swagger-ui-custom.html`.
+Keycloak admin console: `http://localhost:8081` (`admin` / `admin`).
 
 Tests (`mvn test`) spin up PostgreSQL automatically via Testcontainers — Docker must be running.
 
