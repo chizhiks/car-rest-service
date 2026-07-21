@@ -29,7 +29,11 @@ services:
       - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
 
   app:
-    build: .
+    build:
+      # docker-compose.yml sits in src/main/docker/, but the Dockerfile is in
+      # the repo root — this walks back up three levels to find it.
+      context: ../../..
+      dockerfile: Dockerfile
     container_name: car-rest-service-app
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cars
