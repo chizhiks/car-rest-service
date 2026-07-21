@@ -1,24 +1,48 @@
 services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: car-rest-service-db
+    environment:
+      POSTGRES_DB: cars
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    container_name: car-rest-service-keycloak
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+
   app:
-    image: 'spring-boot-rest-service/car-rest-service-docker:latest'
-    container_name: car-app
-    depends_on:
-      - db
+    build: .
+    container_name: car-rest-service-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cars
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/car-rest-service
     ports:
       - "8000:8000"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/car_database
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=1234
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
-      - SPRING_JPA_GENERATE_DDL=true
-      - SPRING_SQL_INIT_MODE=never
-      - CSV_IMPORT_ENABLED=false
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
 
-  db:
-    image: 'postgres:17'
-    container_name: car-db
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_DB=car_database
+volumes:
+  postgres_data:
